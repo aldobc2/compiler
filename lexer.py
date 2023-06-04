@@ -27,19 +27,23 @@ class Lexer():
         self.lexer.add('ASSIGN', r':=')
         
         # Colon
-        self.lexer.add('COLON', r'\:')
+        self.lexer.add('COLON', r':')
         
         # Semi Colon
-        self.lexer.add('SEMI_COLON', r'\;')
+        self.lexer.add('SEMI_COLON', r';')
 
         # Coma
         self.lexer.add('COMA', r'\,')
+        
+        self.lexer.add('PLUSPLUS', r'\+\+')
+        self.lexer.add('MINUSMINUS', r'--')
+        
 
         # Arithmetic Operators
         self.lexer.add('SUM', r'\+')
-        self.lexer.add('SUB', r'\-')
+        self.lexer.add('SUB', r'-')
         self.lexer.add('MULT', r'\*')
-        self.lexer.add('DIV', r'\/')
+        self.lexer.add('DIV', r'/')
 
         # Relational Operators
         self.lexer.add('LESS_EQUAL', r'<=')
@@ -47,10 +51,9 @@ class Lexer():
         self.lexer.add('LESS_THAN', r'<')
         self.lexer.add('GREATER_THAN', r'>')
         self.lexer.add('NOT_EQUAL_TO', r'!=')
-        self.lexer.add('IS_EQUAL', r'==')
 
         # =
-        self.lexer.add('EQUAL', r'\=')
+        self.lexer.add('EQUAL', r'\=') # quitar backslash si truena
 
         # and - or
         self.lexer.add('AND', r'and')
@@ -73,12 +76,15 @@ class Lexer():
         self.lexer.add('DATA_STRING', r'string')
         self.lexer.add('DATA_REAL', r'real')
         self.lexer.add('DATA_BOOLEAN', r'bool')
+        
+        # Double signs
+        
 
         # Data Types - values
         self.lexer.add('REAL',  r"\d+(\.\d+)")
         self.lexer.add('INT', r'\d+')
-        self.lexer.add('STRING', r'".*"')
         self.lexer.add('BOOLEAN', r"(true|false)")
+        self.lexer.add('STRING', r'\".*\"')
 
         # IDs - Vars
         self.lexer.add('VAR', r'var')

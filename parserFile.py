@@ -11,7 +11,7 @@ class Parser():
              'LESS_EQUAL', 'GREATER_EQUAL', 'LESS_THAN', 'GREATER_THAN', 'NOT_EQUAL_TO', 
              'IS_EQUAL', 'EQUAL', 'AND', 'OR', 'IF', 'ELSE', 'THEN', 'WHILE', 'DO', 'FOR', 
              'DATA_REAL', 'DATA_INT', 'DATA_STRING', 'DATA_BOOLEAN', 'REAL', 'INT',
-             'STRING', 'BOOLEAN', 'VAR_NAME', 'VAR', 'COLON'],
+             'STRING', 'BOOLEAN', 'VAR_NAME', 'VAR', 'COLON', 'PLUSPLUS', 'MINUSMINUS'],
             
             # Precedencia ascendente para reglas de produccion
             precedence = [
@@ -25,13 +25,26 @@ class Parser():
 
     def parse(self):
         # main program
-        @self.pg.production("program : PROGRAM MAIN O_BRACES defs BEGIN SEMI_COLON statements END SEMI_COLON C_BRACES")
-                
+        #@self.pg.production("program : PROGRAM MAIN O_BRACES defs BEGIN SEMI_COLON statements END SEMI_COLON C_BRACES")
+        @self.pg.production("program : PROGRAM MAIN O_BRACES block C_BRACES")              
         def program(p):
             #print(p[2])
-            return p[2]
+            return p[3]
+        
+        @self.pg.production("block : start start")
+        @self.pg.production("block : start")
+        def block_all(p):
+            return Statements(p)
+        
+        @self.pg.production("start : defs")
+        def process_defs(p):
+            return p[0]
+        
+        @self.pg.production("start : BEGIN SEMI_COLON statements END SEMI_COLON")
+        def one_block(p):
+            return p[2]      
 
-        @self.pg.production("statements : statements statements")
+        @self.pg.production("statements : statements statements") # second statements is a list
         @self.pg.production("statements : proc")
         @self.pg.production("statements : exp")
         def statements_all(p):
@@ -58,7 +71,7 @@ class Parser():
                 return Declare(n)
         
         # asigna
-        @self.pg.production('proc : VAR_NAME ASSIGN exp')
+        @self.pg.production('proc : VAR_NAME ASSIGN exp SEMI_COLON')
         def varAssign(p):
             return Assign(p[0].getstr(), p[2])
         

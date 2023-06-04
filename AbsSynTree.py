@@ -10,6 +10,15 @@ class Statements:
             print(node)
             node.eval()
             
+class Block:
+    def __init__(self, nodes):
+        self.nodes = nodes
+        
+    def eval(self):
+        for node in self.nodes:
+            print(node)
+            node.eval()
+            
 class Real():
     def __init__(self, value):
         self.value = value
