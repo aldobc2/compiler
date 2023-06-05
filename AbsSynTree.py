@@ -7,7 +7,7 @@ class Statements:
 
     def eval(self):
         for node in self.nodes:
-            print(node)
+            #print(node)
             node.eval()
             
 class Block:
@@ -16,7 +16,7 @@ class Block:
         
     def eval(self):
         for node in self.nodes:
-            print(node)
+            #print(node)
             node.eval()
             
 class Real():
@@ -39,6 +39,13 @@ class String():
 
     def eval(self):
         return str(self.value)
+    
+class Boolean():
+    def __init__(self, value):
+        self.value = value
+    
+    def eval(self):
+        return True if self.value == "true" else False
     
 class StringConcat:
     def __init__(self, s1, s2):
@@ -118,6 +125,12 @@ class Assign():
 
     def eval(self):
         variables[self.name] = self.value.eval()
+        #print("The value of: ", variables[self.name], " is ", self.value.eval())
+        #print("esto es lo que tiene la variable", variables[self.name])
+        
+    # def evalParam(self, nameVar, value):
+    #         variables[self.nameVar] = self.value.eval()
+    #         print(self.nameVar, self.value)
 
 class Declare:
     def __init__(self, name):
@@ -158,18 +171,35 @@ class If():
        elif self.else_block is not None:
            return self.else_block.eval()
        # return None
+       
 
 class ForCycle:
-    def __init__(self, identifier, condition, increment, body):
+    def __init__(self, identifier, idenVal, condition, stepVar, stepOp, block):
         self.id = identifier
-        self.condition = condition
-        self.increment = increment
-        self.body = body
+        self.idenVal = idenVal
+        self.cond = condition
+        self.stepVar = stepVar
+        self.stepOp = stepOp
+        self.block = block
     
     def eval(self):
-        while(self.condition.eval()):
-            self.body.eval()
-            self.increment.eval()
+        # for n in variables:
+        #     print(n)
+        #print(self.id)
+        obj1 = Assign(self.id.getstr(), self.idenVal) # creo objeto para agregar variable a diccionario
+        obj1.eval() # ejecuto eval para que se anada la variable al diccionario
+        #print(self.stepOp.getstr() == '++')
+        #print(self.idenVal)
+        
+        while(self.cond.eval()):
+            self.block.eval()
+            if (self.stepOp.getstr() == '++'):
+                variables[self.id.getstr()] += 1
+                #print("var actualizada dentro del if", variables[self.id.getstr()])
+            else:
+                variables[self.id.getstr()] -= 1
+            
+                
 
 class WhileCycle:
     def __init__(self, condition, func):

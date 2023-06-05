@@ -48,7 +48,7 @@ class Parser():
         @self.pg.production("statements : proc")
         @self.pg.production("statements : exp")
         def statements_all(p):
-            print(p)
+            #print(p)
             return Statements(p)
         
         # Declara
@@ -63,10 +63,10 @@ class Parser():
         @self.pg.production('defs : VAR VAR_LIST COLON dataType SEMI_COLON')
         def varDec(p):
             VAR_LIST = p[1]
-            print(p[1])
-            print(p[2])
-            print(p[3])
-            print(p[4])
+            # print(p[1])
+            # print(p[2])
+            # print(p[3])
+            # print(p[4])
             for n in VAR_LIST:
                 return Declare(n)
         
@@ -103,6 +103,7 @@ class Parser():
                 return Div(left, right)
             
         # Opera Rels
+        # condicionales de comparacion
         @self.pg.production('exp : exp LESS_EQUAL exp')
         @self.pg.production('exp : exp GREATER_EQUAL exp')
         @self.pg.production('exp : exp LESS_THAN exp')
@@ -147,13 +148,14 @@ class Parser():
         def string(p):
             return String(p[0].value[1:-1])
         
+        @self.pg.production('exp : BOOLEAN')
+        def boolean(p):
+            return Boolean(p[0].value)
+        
         # Write
         @self.pg.production('proc : WRITE exp SEMI_COLON')
         def proc(p):
-            if len(p) > 1:
-                return Print(p[1])
-            else:
-                return p[0]
+            return Print(p[1])
             
         # and | or 
         @self.pg.production('exp : exp AND exp')
@@ -180,10 +182,18 @@ class Parser():
         def whileLoop(p):
             return WhileCycle(p[2], p[6])
         
-        #for
-        @self.pg.production('proc : FOR O_PAREN VAR_NAME SEMI_COLON exp SEMI_COLON proc C_PAREN O_BRACES statements C_BRACES')
+        # Assign for FOR cycles
+        @self.pg.production('assignFor : VAR_NAME ASSIGN exp SEMI_COLON')
+        def varAssign(p):
+            return Assign(p[0].getstr(), p[2])
+        
+        #for 
+        # segundo exp de condicional cambiar nombre
+        @self.pg.production('proc : FOR O_PAREN VAR_NAME ASSIGN exp SEMI_COLON exp SEMI_COLON VAR_NAME PLUSPLUS C_PAREN O_BRACES statements C_BRACES')
+        @self.pg.production('proc : FOR O_PAREN VAR_NAME ASSIGN exp SEMI_COLON exp SEMI_COLON VAR_NAME MINUSMINUS C_PAREN O_BRACES statements C_BRACES')
         def forLoop(p): 
-            return ForCycle(p[2], p[4], p[6], p[9])
+            return ForCycle(p[2], p[4], p[6], p[8], p[9], p[12])      
+        
 
         @self.pg.error
         def error_handler(token):
