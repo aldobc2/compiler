@@ -1,12 +1,15 @@
 program main{
 	var i,n,x : int;
 	begin;
-		write("factorial for");
-		x:=1;
-		n:=5;	
-		for (i:=1;i<n;i++){
-			x := x * i;
+		write("factorial while");
+		n := 1;
+		x := 1;
+		while (n<=5) do
+		{
+			write("Hola Mundo!");
+			write(n);
+			n++;
 		}
-		write(x);
+		write(n);
 	end;
 }

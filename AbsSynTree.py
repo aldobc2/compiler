@@ -68,6 +68,20 @@ class Sub(BinaryOp):
     def eval(self):
         return self.left.eval() - self.right.eval()
     
+class SubSub:
+    def __init__(self, name):
+        self.name = name
+    
+    def eval(self):
+        variables[self.name.getstr()] -= 1
+        
+class PluPlu:
+    def __init__(self, name):
+        self.name = name
+    
+    def eval(self):
+        variables[self.name.getstr()] += 1
+    
 class Mult(BinaryOp):
     def eval(self):
         return self.left.eval() * self.right.eval()
@@ -198,12 +212,11 @@ class ForCycle:
                 #print("var actualizada dentro del if", variables[self.id.getstr()])
             else:
                 variables[self.id.getstr()] -= 1
-            
-                
 
 class WhileCycle:
     def __init__(self, condition, func):
         self.condition = condition
+        print(self.condition)
         self.func = func
 
     def eval(self):

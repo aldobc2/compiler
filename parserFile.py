@@ -28,7 +28,6 @@ class Parser():
         #@self.pg.production("program : PROGRAM MAIN O_BRACES defs BEGIN SEMI_COLON statements END SEMI_COLON C_BRACES")
         @self.pg.production("program : PROGRAM MAIN O_BRACES block C_BRACES")              
         def program(p):
-            #print(p[2])
             return p[3]
         
         @self.pg.production("block : start start")
@@ -101,6 +100,16 @@ class Parser():
                 return Mult(left, right)
             elif operator.gettokentype() == 'DIV':
                 return Div(left, right)
+        
+        @self.pg.production('exp : VAR_NAME MINUSMINUS SEMI_COLON')
+        @self.pg.production('exp : VAR_NAME PLUSPLUS SEMI_COLON')
+        def exp_ari(p):
+            left = p[0]
+            operator = p[1]
+            if operator.gettokentype() == 'MINUSMINUS':
+                return SubSub(p[0])
+            else:
+                return PluPlu(p[0])
             
         # Opera Rels
         # condicionales de comparacion
